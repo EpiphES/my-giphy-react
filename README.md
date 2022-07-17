@@ -1,1 +1,1 @@
-# my-giphy-react
+# My Giphy
