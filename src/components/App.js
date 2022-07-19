@@ -12,13 +12,21 @@ import Upload from "./Upload";
 function App() {
   const [trendingGifs, setTrendingGifs] = useState([])
 
-  useEffect(() => {
+  function loadTrendingGifs() {
     api
       .getTrendingGifs()
       .then((gifs) => {
         setTrendingGifs(gifs.data);
       })
       .catch((err) => console.log(err));
+  }
+
+  function handleUpdateTrending() {
+    loadTrendingGifs();
+  }
+
+  useEffect(() => {
+    loadTrendingGifs();
   }, []);
 
   return (
@@ -27,7 +35,7 @@ function App() {
         <Tabs />
         <Switch>
           <Route path="/trending">
-            <Trending gifs={trendingGifs}/>
+            <Trending gifs={trendingGifs} onUpdateTrending={handleUpdateTrending}/>
           </Route>
           <Route path="/search">
             <Search />
