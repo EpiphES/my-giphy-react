@@ -1,0 +1,12 @@
+.gif {
+  width: 200px;
+  margin-bottom: 20px;
+  display: flex;
+  background-color: aliceblue;
+}
+
+.gif__image {
+  width: 200px;
+  
+  flex-shrink: 0;
+}
