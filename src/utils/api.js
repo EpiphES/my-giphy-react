@@ -1,5 +1,5 @@
 class Api {
-  constructor({downloadUrl, uploadUrl, apiKey}) {
+  constructor({ downloadUrl, uploadUrl, apiKey }) {
     this._downloadUrl = downloadUrl;
     this._uploadUrl = uploadUrl;
     this._apiKey = apiKey;
@@ -7,14 +7,27 @@ class Api {
 
   getTrendingGifs() {
     return fetch(
-      `${this._downloadUrl}/trending?api_key=${this._apiKey}&limit=30`
+      `${this._downloadUrl}/gifs/trending?api_key=${this._apiKey}&limit=30`
     ).then(this._checkResponse);
   }
 
-  searchGifs(searchWord) {
+  searchGifs(searchQuery) {
     return fetch(
-      `${this._downloadUrl}/search?api_key=${this._apiKey}&q=${searchWord}&limit=20`
+      `${this._downloadUrl}/gifs/search?api_key=${this._apiKey}&q=${searchQuery}&limit=20`
     ).then(this._checkResponse);
+  }
+
+  getTrendingSearches() {
+    return fetch(
+      `${this._downloadUrl}/trending/searches?api_key=${this._apiKey}`
+    ).then(this._checkResponse);
+  }
+
+  getAutocomplete(searchQuery) {
+    return fetch(
+      `${this._downloadUrl}/gifs/search/tags?api_key=${this._apiKey}&q=${searchQuery}`
+    ).then(this._checkResponse);
+    
   }
 
   getRandomGif() {
@@ -40,12 +53,14 @@ class Api {
   }
 
   _checkResponse(res) {
-    return res.ok ? res.json() : Promise.reject(`Ошибка загрузки: ${res.status}`);
+    return res.ok
+      ? res.json()
+      : Promise.reject(`Ошибка загрузки: ${res.status}`);
   }
 }
 
 const api = new Api({
-  downloadUrl: "https://api.giphy.com/v1/gifs",
+  downloadUrl: "https://api.giphy.com/v1",
   uploadUrl: "https://upload.giphy.com/v1/gifs",
   apiKey: "U5zS22kTjXKZUEQVNwtDWaGWJZFSGT1L",
 });
