@@ -13,10 +13,13 @@ import Upload from "./Upload";
 function App() {
   const [trendingGifs, setTrendingGifs] = useState([]);
 
+  const [searchedGifs, setSearchedGifs] = useState ([])
+
   const [trendingSearches, setTrendingSearches] = useState([]);
 
   const [autocompleteSearches, setAutocommpleteSearches] = useState([]); 
 
+  const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   
   function loadTrendingGifs() {
@@ -46,28 +49,39 @@ function App() {
   function loadAutocompleteSearches(query) {
     api
       .getAutocomplete(query)
-      .then((res) => {console.log(res.data);setAutocommpleteSearches(res.data.map(item => item.name))})
+      .then((res) => setAutocommpleteSearches(res.data.map(item => item.name)))
       .catch((err) => console.log(err));
   }
 
   useEffect (() => {
-    if(searchQuery === "") {
+    if(searchInput === "") {
       loadTrendingSearches();
+      setSearchedGifs([]);
+      loadTrendingGifs();
+      setSearchQuery("");
     }
     else {
-      loadAutocompleteSearches(searchQuery);
+      loadAutocompleteSearches(searchInput);
     }
 
-  }, [searchQuery])
+  }, [searchInput])
 
   function handleInputChange(e) {
-    setSearchQuery(e.target.value);
+    setSearchInput(e.target.value);
   }
 
   function handleSearch(query) {
+    setSearchInput(query);
+    setSearchQuery(query);
     api
       .searchGifs(query)
-      .then((res) => console.log(res))
+      .then((res) => {
+        if(res.data.length === 0) {
+          alert("Nothing found!")
+        }
+
+        setSearchedGifs(res.data);
+      })
       .catch((err) => console.log(err));
   }
 
@@ -81,8 +95,11 @@ function App() {
         <Route path="/search">
           <Search 
             trendingSearches={trendingSearches} autocompleteSearches={autocompleteSearches} 
-            searchQuery={searchQuery} onInputChange={handleInputChange}
-            onSearch={handleSearch} />
+            searchInput={searchInput} onInputChange={handleInputChange}
+            onSearch={handleSearch}
+            trendingGifs={trendingGifs}  searchedGifs={searchedGifs}
+            searchQuery={searchQuery}
+          />
         </Route>
         <Route path="/random">
           <Random />

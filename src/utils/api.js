@@ -11,23 +11,22 @@ class Api {
     ).then(this._checkResponse);
   }
 
-  searchGifs(searchQuery) {
+  searchGifs(searchInput) {
     return fetch(
-      `${this._downloadUrl}/gifs/search?api_key=${this._apiKey}&q=${searchQuery}&limit=20`
+      `${this._downloadUrl}/gifs/search?api_key=${this._apiKey}&q=${searchInput}&limit=20`
     ).then(this._checkResponse);
   }
 
   getTrendingSearches() {
     return fetch(
       `${this._downloadUrl}/trending/searches?api_key=${this._apiKey}`
-    ).then(this._checkResponse);
+    ).then(this._checkResponse);    
   }
 
-  getAutocomplete(searchQuery) {
+  getAutocomplete(searchInput) {
     return fetch(
-      `${this._downloadUrl}/gifs/search/tags?api_key=${this._apiKey}&q=${searchQuery}`
-    ).then(this._checkResponse);
-    
+      `${this._downloadUrl}/gifs/search/tags?api_key=${this._apiKey}&q=${searchInput}`
+    ).then(this._checkResponse);    
   }
 
   getRandomGif() {
@@ -62,7 +61,7 @@ class Api {
 const api = new Api({
   downloadUrl: "https://api.giphy.com/v1",
   uploadUrl: "https://upload.giphy.com/v1/gifs",
-  apiKey: "U5zS22kTjXKZUEQVNwtDWaGWJZFSGT1L",
+  apiKey: "yIKXK4tL4v1AEVLuQS5j2O4WuLHoSg75",
 });
 
 export default api;

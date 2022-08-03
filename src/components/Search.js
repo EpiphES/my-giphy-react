@@ -1,4 +1,7 @@
-function Search({searchQuery, trendingSearches, autocompleteSearches, onInputChange, onSearch}) {
+import Gallery from "./Gallery";
+
+function Search({searchInput, trendingSearches, autocompleteSearches, onInputChange, onSearch, trendingGifs, searchedGifs, searchQuery}) {
+  
   function getSearchesList(searchesArray) {
     return searchesArray.map((query, index) => (
       <p key={index} onClick={() => onSearch(query)}>
@@ -11,7 +14,7 @@ function Search({searchQuery, trendingSearches, autocompleteSearches, onInputCha
 
   function handleFormSubmit(e) {
     e.preventDefault();
-    onSearch(searchQuery);
+    onSearch(searchInput);
   }
   return (
     <>
@@ -24,7 +27,7 @@ function Search({searchQuery, trendingSearches, autocompleteSearches, onInputCha
           placeholder="Search all the GIFs"
           minLength="2"
           required
-          value={searchQuery}
+          value={searchInput}
           onChange={(e) => onInputChange(e)}
         />
         <button
@@ -39,11 +42,15 @@ function Search({searchQuery, trendingSearches, autocompleteSearches, onInputCha
           >Search</button>
       </form>
       <div className="search__query-list">
-        {searchQuery ? 
+        {searchInput ? 
         autocompleteSearchesList : 
         trendingSearchesList }
       </div>
-      
+      {searchInput ?
+      <> 
+      {searchQuery && <h2>Search results for: {searchQuery}</h2> }
+      <Gallery gifs={searchedGifs} />
+      </> : <Gallery gifs={trendingGifs} />}     
     </>
   );
 }
