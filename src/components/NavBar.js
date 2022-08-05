@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 function NavBar() {
   return (
-    <Navbar sticky="top" variant="dark" bg="dark" expand="sm">
+    <Navbar fixed="top" variant="dark" bg="dark" expand="sm">
       <Container>
         <Navbar.Brand href="https://giphy.com/" target="_blank">
           My Giphy

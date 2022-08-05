@@ -1,13 +1,12 @@
+import Container from "react-bootstrap/Container";
 import Gallery from "./Gallery";
 
-function Trending({gifs, onUpdateTrending}) {
+function Trending({gifs}) {
   return (
-    <>
-      <h2>Trending</h2>
-      <button className="update-button" onClick={onUpdateTrending}>Update</button>
-      
+    <Container
+      style={{ marginTop: "66px", paddingBottom: "10px" }}>
       <Gallery gifs={gifs} />
-    </>
+    </Container>
   );
 }
 

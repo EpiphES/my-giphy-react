@@ -29,13 +29,13 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function handleUpdateTrending() {
-    loadTrendingGifs();
-  }
+  // function handleUpdateTrending() {
+  //   loadTrendingGifs();
+  // }
 
-  useEffect(() => {
-    loadTrendingGifs();
-  }, []);
+  // useEffect(() => {
+  //   loadTrendingGifs();
+  // }, []);
 
   function loadTrendingSearches() {
     api
@@ -90,7 +90,7 @@ function App() {
         <Route path="/trending">
           <Trending
             gifs={trendingGifs}
-            onUpdateTrending={handleUpdateTrending}
+            onMount={loadTrendingGifs}
           />
         </Route>
         <Route path="/search">
