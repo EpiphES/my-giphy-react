@@ -3,10 +3,11 @@ import { useEffect, useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import api from "../utils/api";
 import NavBar from "./NavBar";
-import Trending from "./Trending";
+import Gallery from "./Gallery";
 import Search from "./Search";
 import Random from "./Random";
 import Upload from "./Upload";
+import { Container } from "react-bootstrap";
 
 function App() {
   const [trendingGifs, setTrendingGifs] = useState([]);
@@ -86,36 +87,35 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <Switch>
-        <Route path="/trending">
-          <Trending
-            gifs={trendingGifs}
-            onMount={loadTrendingGifs}
-          />
-        </Route>
-        <Route path="/search">
-          <Search
-            trendingSearches={trendingSearches}
-            autocompleteSearches={autocompleteSearches}
-            searchInput={searchInput}
-            onInputChange={handleInputChange}
-            onSearch={handleSearch}
-            trendingGifs={trendingGifs}
-            searchedGifs={searchedGifs}
-            searchQuery={searchQuery}
-          />
-        </Route>
-        <Route path="/random">
-          <Random />
-        </Route>
-        <Route path="/upload">
-          <Upload />
-        </Route>
-        <Route path="/gifs/:id"></Route>
-        <Route path="*">
-          <Redirect to="/trending" />
-        </Route>
-      </Switch>
+      <Container style={{ marginTop: "56px" }}>
+        <Switch>
+          <Route path="/trending">
+            <Gallery gifs={trendingGifs} />
+          </Route>
+          <Route path="/search">
+            <Search
+              trendingSearches={trendingSearches}
+              autocompleteSearches={autocompleteSearches}
+              searchInput={searchInput}
+              onInputChange={handleInputChange}
+              onSearch={handleSearch}
+              trendingGifs={trendingGifs}
+              searchedGifs={searchedGifs}
+              searchQuery={searchQuery}
+            />
+          </Route>
+          <Route path="/random">
+            <Random />
+          </Route>
+          <Route path="/upload">
+            <Upload />
+          </Route>
+          <Route path="/gifs/:id"></Route>
+          <Route path="*">
+            <Redirect to="/trending" />
+          </Route>
+        </Switch>
+      </Container>
     </div>
   );
 }

@@ -9,7 +9,7 @@ function Gallery({gifs}) {
   });
 
   return (
-    <ResponsiveMasonry columnsCountBreakPoints={{ 350: 2, 576: 3,768: 4, 992: 5, 1200: 6 }}>
+    <ResponsiveMasonry columnsCountBreakPoints={{ 350: 2, 576: 3,768: 4, 992: 5, 1200: 6 }} className="pt-2 pb-2">
       <Masonry gutter="10px">
         {gifElements}
       </Masonry>
