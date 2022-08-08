@@ -1,12 +1,18 @@
 import Gallery from "./Gallery";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import ListGroup from "react-bootstrap/ListGroup";
+import searchIcon from "../images/search.svg"
+
 
 function Search({searchInput, trendingSearches, autocompleteSearches, onInputChange, onSearch, trendingGifs, searchedGifs, searchQuery}) {
   
   function getSearchesList(searchesArray) {
     return searchesArray.map((query, index) => (
-      <p key={index} onClick={() => onSearch(query)}>
-        {query}
-      </p>
+      <ListGroup.Item action key={index} onClick={() => onSearch(query)}>
+        <img src={searchIcon} alt="search icon" width="10px" hight="10px"/>{" "}{query}
+      </ListGroup.Item>
     ));
   }
   const trendingSearchesList = getSearchesList(trendingSearches);
@@ -18,39 +24,45 @@ function Search({searchInput, trendingSearches, autocompleteSearches, onInputCha
   }
   return (
     <>
-      <form className="search__form" name="search-form" onSubmit={handleFormSubmit}>
-        <input
-          className="search__input"
+      <InputGroup as="form" className="pt-2 mb-3" onSubmit={handleFormSubmit}>
+        <Form.Control
           type="text"
+          placeholder="Search all the GIFs"
           name="search"
           id="search-input"
-          placeholder="Search all the GIFs"
           minLength="2"
           required
           value={searchInput}
           onChange={(e) => onInputChange(e)}
         />
-        <button
-          className="search__reset-button"
-          type="reset"
-          aria-label="reset input" 
-          >Reset</button>
-        <button
-          className="search__submit-button"
-          type="submit"
-          aria-label="search"
-          >Search</button>
-      </form>
-      <div className="search__query-list">
+        <Button variant="outline-dark" type="reset" aria-label="reset input">
+          Reset
+        </Button>
+        <Button variant="warning" type="submit" aria-label="search">
+          Search
+        </Button>
+      </InputGroup>
+      <ListGroup variant="flush" className="mb-3">
         {searchInput ? 
-        autocompleteSearchesList : 
-        trendingSearchesList }
-      </div>
-      {searchInput ?
-      <> 
-      {searchQuery && <h2>Search results for: {searchQuery}</h2> }
-      <Gallery gifs={searchedGifs} />
-      </> : <Gallery gifs={trendingGifs} />}     
+          autocompleteSearchesList          
+        : (
+          <>
+            <p className="h6">Trending searches</p>
+            {trendingSearchesList}
+          </>
+        )}
+      </ListGroup>
+      {searchInput ? (
+        <>
+          {searchQuery && <h3>Search results for: {searchQuery}</h3>}
+          <Gallery gifs={searchedGifs} />
+        </>
+      ) : (
+        <>
+          <p className="h6">Popular now</p>
+          <Gallery gifs={trendingGifs} />
+        </>
+      )}
     </>
   );
 }

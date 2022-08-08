@@ -13,7 +13,7 @@ class Api {
 
   searchGifs(searchInput) {
     return fetch(
-      `${this._downloadUrl}/gifs/search?api_key=${this._apiKey}&q=${searchInput}&limit=20`
+      `${this._downloadUrl}/gifs/search?api_key=${this._apiKey}&q=${searchInput}&limit=30`
     ).then(this._checkResponse);
   }
 
