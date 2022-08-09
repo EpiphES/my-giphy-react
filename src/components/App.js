@@ -84,6 +84,10 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  function handleResetSearchInput() {
+    setSearchInput("");
+  }
+
   return (
     <div className="App">
       <NavBar />
@@ -102,6 +106,7 @@ function App() {
               trendingGifs={trendingGifs}
               searchedGifs={searchedGifs}
               searchQuery={searchQuery}
+              onResetInput={handleResetSearchInput}
             />
           </Route>
           <Route path="/random">
@@ -110,7 +115,10 @@ function App() {
           <Route path="/upload">
             <Upload />
           </Route>
-          <Route path="/gifs/:id"></Route>
+          <Route path="/gifs/:id">
+            GifView
+            {/* <GifView /> */}
+          </Route>
           <Route path="*">
             <Redirect to="/trending" />
           </Route>

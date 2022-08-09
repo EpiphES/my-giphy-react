@@ -6,7 +6,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import searchIcon from "../images/search.svg"
 
 
-function Search({searchInput, trendingSearches, autocompleteSearches, onInputChange, onSearch, trendingGifs, searchedGifs, searchQuery}) {
+function Search({searchInput, trendingSearches, autocompleteSearches, onInputChange, onSearch, trendingGifs, searchedGifs, searchQuery, onResetInput}) {
   
   function getSearchesList(searchesArray) {
     return searchesArray.map((query, index) => (
@@ -22,6 +22,7 @@ function Search({searchInput, trendingSearches, autocompleteSearches, onInputCha
     e.preventDefault();
     onSearch(searchInput);
   }
+
   return (
     <>
       <InputGroup as="form" className="pt-2 mb-3" onSubmit={handleFormSubmit}>
@@ -35,7 +36,7 @@ function Search({searchInput, trendingSearches, autocompleteSearches, onInputCha
           value={searchInput}
           onChange={(e) => onInputChange(e)}
         />
-        <Button variant="outline-dark" type="reset" aria-label="reset input">
+        <Button variant="outline-dark" type="reset" aria-label="reset input" onClick={() => onResetInput()}>
           Reset
         </Button>
         <Button variant="warning" type="submit" aria-label="search">
