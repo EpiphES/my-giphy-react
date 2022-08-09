@@ -1,10 +1,25 @@
-import Gif from "./Gif";
+// import Gif from "./Gif";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
+import Image from "react-bootstrap/Image";
+import { Link } from "react-router-dom";
 
 function Gallery({gifs}) {
-  const gifElements = gifs.map((item) => {
-    return (      
-        <Gif key={item.id} gif={item} />
+  const gifElements = gifs.map((gif) => {
+    return (
+        <Link
+          key={gif.id}
+          to={`/gifs/${gif.id}`}
+          className="bg-warning rounded"
+          style={{
+            aspectRatio: gif.images.original.width / gif.images.original.height,
+          }}>
+          <Image
+            className="w-100 "
+            rounded
+            src={gif.images.original.url}
+            alt={gif.title}
+        />
+      </Link>        
     );
   });
 
