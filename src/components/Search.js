@@ -6,7 +6,7 @@ import ListGroup from "react-bootstrap/ListGroup";
 import searchIcon from "../images/search.svg"
 
 
-function Search({searchInput, trendingSearches, autocompleteSearches, onInputChange, onSearch, trendingGifs, searchedGifs, searchQuery, onResetInput}) {
+function Search({searchInput, trendingSearches, autocompleteSearches, onInputChange, onSearch, trendingGifs, searchedGifs, searchQuery, onResetInput, isLoading}) {
   
   function getSearchesList(searchesArray) {
     return searchesArray.map((query, index) => (
@@ -65,12 +65,12 @@ function Search({searchInput, trendingSearches, autocompleteSearches, onInputCha
       {searchInput ? (
         <>
           {searchQuery && <h3>Search results for: {searchQuery}</h3>}
-          <Gallery gifs={searchedGifs} />
+          <Gallery gifs={searchedGifs} isLoading={isLoading} />
         </>
       ) : (
         <>
           <p className="h6">Popular now</p>
-          <Gallery gifs={trendingGifs} />
+          <Gallery gifs={trendingGifs} isLoading={isLoading} />
         </>
       )}
     </>

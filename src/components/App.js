@@ -17,14 +17,17 @@ function App() {
   const [autocompleteSearches, setAutocommpleteSearches] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   function loadTrendingGifs() {
+    setIsLoading(true);
     api
       .getTrendingGifs()
       .then((gifs) => {
         setTrendingGifs(gifs.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {setIsLoading(false)});
   }
 
   function loadTrendingSearches() {
@@ -53,13 +56,6 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function loadGifById(id) {
-    api
-      .getGifById(id)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  }
-
   useEffect(() => {
     if (searchInput === "") {
       loadTrendingSearches();
@@ -76,6 +72,7 @@ function App() {
   }
 
   function handleSearch(query) {
+    setIsLoading(true);
     setSearchInput(query);
     setSearchQuery(query);
     api
@@ -87,7 +84,10 @@ function App() {
 
         setSearchedGifs(res.data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   function handleResetSearchInput() {
@@ -100,7 +100,7 @@ function App() {
       <Container style={{ marginTop: "56px" }}>
         <Switch>
           <Route path="/trending">
-            <Gallery gifs={trendingGifs} />
+            <Gallery gifs={trendingGifs} isLoading={isLoading} />
           </Route>
           <Route path="/search">
             <Search
@@ -113,6 +113,7 @@ function App() {
               searchedGifs={searchedGifs}
               searchQuery={searchQuery}
               onResetInput={handleResetSearchInput}
+              isLoading={isLoading}
             />
           </Route>
           <Route path="/random">
@@ -122,7 +123,7 @@ function App() {
             <Upload />
           </Route>
           <Route path="/gifs/:id">
-            <Gif onLoadGif={loadGifById} />          
+            <Gif />          
           </Route>
           <Route path="*">
             <Redirect to="/trending" />
