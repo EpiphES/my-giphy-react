@@ -36,17 +36,26 @@ function Search({searchInput, trendingSearches, autocompleteSearches, onInputCha
           value={searchInput}
           onChange={(e) => onInputChange(e)}
         />
-        <Button variant="outline-dark" type="reset" aria-label="reset input" onClick={() => onResetInput()}>
-          Reset
-        </Button>
-        <Button variant="warning" type="submit" aria-label="search">
-          Search
-        </Button>
+        <Button
+          variant="outline-dark"
+          aria-label="reset input"
+          as="input"
+          type="reset"
+          value="Reset"
+          onClick={() => onResetInput()}
+        />
+        <Button
+          aria-label="search"
+          variant="warning"
+          as="input"
+          type="submit"
+          value="Search"
+        />
       </InputGroup>
       <ListGroup variant="flush" className="mb-3">
-        {searchInput ? 
-          autocompleteSearchesList          
-        : (
+        {searchInput ? (
+          autocompleteSearchesList
+        ) : (
           <>
             <p className="h6">Trending searches</p>
             {trendingSearchesList}
