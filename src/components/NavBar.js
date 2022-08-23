@@ -7,9 +7,9 @@ import { Link, useLocation } from "react-router-dom";
 
 function NavBar() {
   const location = useLocation();
-  console.log(location.pathname);
+  
   return (
-    <Navbar fixed="top" variant="dark" bg="dark" expand="sm">
+    <Navbar fixed="top" variant="dark" bg="dark" expand="sm" collapseOnSelect>
       <Container>
         <Navbar.Brand href="https://giphy.com/" target="_blank">
           My Giphy
@@ -32,7 +32,7 @@ function NavBar() {
           </Nav>
         </NavbarCollapse>
       </Container>
-    </Navbar>    
+    </Navbar>
   );
 }
 
