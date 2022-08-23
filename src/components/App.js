@@ -1,23 +1,20 @@
-
 import { useEffect, useState } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
+import { Container } from "react-bootstrap";
+
 import api from "../utils/api";
 import NavBar from "./NavBar";
 import Gallery from "./Gallery";
 import Search from "./Search";
+import Gif from "./Gif"
 import Random from "./Random";
 import Upload from "./Upload";
-import { Container } from "react-bootstrap";
 
 function App() {
   const [trendingGifs, setTrendingGifs] = useState([]);
-
   const [searchedGifs, setSearchedGifs] = useState([]);
-
   const [trendingSearches, setTrendingSearches] = useState([]);
-
   const [autocompleteSearches, setAutocommpleteSearches] = useState([]);
-
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -30,6 +27,13 @@ function App() {
       .catch((err) => console.log(err));
   }
 
+  function loadTrendingSearches() {
+    api
+      .getTrendingSearches()
+      .then((res) => setTrendingSearches(res.data.slice(0, 5)))
+      .catch((err) => console.log(err));
+  }
+
   // function handleUpdateTrending() {
   //   loadTrendingGifs();
   // }
@@ -38,12 +42,7 @@ function App() {
   //   loadTrendingGifs();
   // }, []);
 
-  function loadTrendingSearches() {
-    api
-      .getTrendingSearches()
-      .then((res) => setTrendingSearches(res.data.slice(0, 5)))
-      .catch((err) => console.log(err));
-  }
+  
 
   function loadAutocompleteSearches(query) {
     api
@@ -51,6 +50,13 @@ function App() {
       .then((res) =>
         setAutocommpleteSearches(res.data.map((item) => item.name))
       )
+      .catch((err) => console.log(err));
+  }
+
+  function loadGifById(id) {
+    api
+      .getGifById(id)
+      .then((res) => console.log(res))
       .catch((err) => console.log(err));
   }
 
@@ -116,8 +122,7 @@ function App() {
             <Upload />
           </Route>
           <Route path="/gifs/:id">
-            GifView
-            {/* <GifView /> */}
+            <Gif onLoadGif={loadGifById} />          
           </Route>
           <Route path="*">
             <Redirect to="/trending" />
