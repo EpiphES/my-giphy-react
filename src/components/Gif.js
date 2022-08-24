@@ -35,9 +35,11 @@ function Gif() {
       className="d-flex flex-column align-items-center pt-3"
       >
       {isLoading ? (
-        <Spinner animation="border" variant="danger" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
+         <Container className="d-flex align-items-center justify-content-center" style={{
+          minHeight:"calc(100vh - 56px)"
+        }}>
+          <Spinner animation="border" variant="danger" role="status" />          
+        </Container>
       ) : (
         <div
           className="mx-auto rounded bg-warning"
