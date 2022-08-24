@@ -1,4 +1,8 @@
+import {useState, useEffect} from "react";
+import api from "../utils/api";
+import Trending from "./Trending";
 import Gallery from "./Gallery";
+
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -6,11 +10,56 @@ import ListGroup from "react-bootstrap/ListGroup";
 import searchIcon from "../images/search.svg"
 
 
-function Search({searchInput, trendingSearches, autocompleteSearches, onInputChange, onSearch, trendingGifs, searchedGifs, searchQuery, onResetInput, isLoading}) {
+
+function Search() {
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchedGifs, setSearchedGifs] = useState([]);
+  const [trendingSearches, setTrendingSearches] = useState([]);
+  const [autocompleteSearches, setAutocommpleteSearches] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  function loadTrendingSearches() {
+    api
+      .getTrendingSearches()
+      .then((res) => setTrendingSearches(res.data.slice(0, 5)))
+      .catch((err) => console.log(err));
+  }
+
+  function loadAutocompleteSearches(query) {
+    api
+      .getAutocomplete(query)
+      .then((res) =>
+        setAutocommpleteSearches(res.data.map((item) => item.name))
+      )
+      .catch((err) => console.log(err));
+  }
+
+  function handleSearch(query) {
+    setIsLoading(true);
+    setSearchInput(query);
+    setSearchQuery(query);
+    api
+      .searchGifs(query)
+      .then((res) => {
+        if (res.data.length === 0) {
+          alert("Nothing found!");
+        }
+        setSearchedGifs(res.data);
+      })
+      .catch((err) => console.log(err))
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }
+
+  function resetInput() {
+    setSearchInput("");
+  }
   
   function getSearchesList(searchesArray) {
     return searchesArray.map((query, index) => (
-      <ListGroup.Item action key={index} onClick={() => onSearch(query)}>
+      <ListGroup.Item action key={index} onClick={() => handleSearch(query)}>
         <img src={searchIcon} alt="search icon" width="10px" hight="10px"/>{" "}{query}
       </ListGroup.Item>
     ));
@@ -20,8 +69,22 @@ function Search({searchInput, trendingSearches, autocompleteSearches, onInputCha
 
   function handleFormSubmit(e) {
     e.preventDefault();
-    onSearch(searchInput);
+    handleSearch(searchInput);
   }
+
+  function handleInputChange(e) {
+    setSearchInput(e.target.value);
+  }
+
+  useEffect(() => {
+    if (searchInput === "") {
+      loadTrendingSearches();
+      setSearchedGifs([]);
+      setSearchQuery("");
+    } else {
+      loadAutocompleteSearches(searchInput);
+    }
+  }, [searchInput]);
 
   return (
     <>
@@ -34,7 +97,7 @@ function Search({searchInput, trendingSearches, autocompleteSearches, onInputCha
           minLength="2"
           required
           value={searchInput}
-          onChange={(e) => onInputChange(e)}
+          onChange={(e) => handleInputChange(e)}
         />
         <Button
           variant="outline-dark"
@@ -42,7 +105,7 @@ function Search({searchInput, trendingSearches, autocompleteSearches, onInputCha
           as="input"
           type="reset"
           value="Reset"
-          onClick={() => onResetInput()}
+          onClick={() => resetInput()}
         />
         <Button
           aria-label="search"
@@ -70,7 +133,7 @@ function Search({searchInput, trendingSearches, autocompleteSearches, onInputCha
       ) : (
         <>
           <p className="h6">Popular now</p>
-          <Gallery gifs={trendingGifs} isLoading={isLoading} />
+          <Trending />
         </>
       )}
     </>
