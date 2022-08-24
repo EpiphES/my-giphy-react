@@ -5,23 +5,23 @@ import Image from "react-bootstrap/Image";
 import Spinner from "react-bootstrap/Spinner";
 import Container from "react-bootstrap/Container";
 
-function Gallery({gifs, isLoading}) {
+function Gallery({gifs, isLoading, url}) {
   const gifElements = gifs.map((gif) => {
     return (
-        <Link
-          key={gif.id}
-          to={`/gifs/${gif.id}`}
-          className="bg-warning rounded"
-          style={{
-            aspectRatio: gif.images.original.width / gif.images.original.height,
-          }}>
-          <Image
-            className="w-100 "
-            rounded
-            src={gif.images.original.url}
-            alt={gif.title}
+      <Link
+        key={gif.id}
+        to={`${url}/gifs/${gif.id}`}
+        className="bg-warning rounded"
+        style={{
+          aspectRatio: gif.images.original.width / gif.images.original.height,
+        }}>
+        <Image
+          className="w-100 "
+          rounded
+          src={gif.images.original.url}
+          alt={gif.title}
         />
-      </Link>        
+      </Link>
     );
   });
 
