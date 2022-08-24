@@ -1,13 +1,16 @@
 import {useState, useEffect} from "react";
+import { Route, useRouteMatch } from "react-router-dom";
 import api from "../utils/api";
 import Trending from "./Trending";
 import Gallery from "./Gallery";
+import Gif from "./Gif";
 
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import ListGroup from "react-bootstrap/ListGroup";
 import searchIcon from "../images/search.svg"
+
 
 
 
@@ -18,6 +21,7 @@ function Search() {
   const [trendingSearches, setTrendingSearches] = useState([]);
   const [autocompleteSearches, setAutocommpleteSearches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { path, url } = useRouteMatch();
 
   function loadTrendingSearches() {
     api
@@ -88,54 +92,59 @@ function Search() {
 
   return (
     <>
-      <InputGroup as="form" className="pt-2 mb-3" onSubmit={handleFormSubmit}>
-        <Form.Control
-          type="text"
-          placeholder="Search all the GIFs"
-          name="search"
-          id="search-input"
-          minLength="2"
-          required
-          value={searchInput}
-          onChange={(e) => handleInputChange(e)}
-        />
-        <Button
-          variant="outline-dark"
-          aria-label="reset input"
-          as="input"
-          type="reset"
-          value="Reset"
-          onClick={() => resetInput()}
-        />
-        <Button
-          aria-label="search"
-          variant="warning"
-          as="input"
-          type="submit"
-          value="Search"
-        />
-      </InputGroup>
-      <ListGroup variant="flush" className="mb-3">
+      <Route exact path={`${path}`}>
+        <InputGroup as="form" className="pt-2 mb-3" onSubmit={handleFormSubmit}>
+          <Form.Control
+            type="text"
+            placeholder="Search all the GIFs"
+            name="search"
+            id="search-input"
+            minLength="2"
+            required
+            value={searchInput}
+            onChange={(e) => handleInputChange(e)}
+          />
+          <Button
+            variant="outline-dark"
+            aria-label="reset input"
+            as="input"
+            type="reset"
+            value="Reset"
+            onClick={() => resetInput()}
+          />
+          <Button
+            aria-label="search"
+            variant="warning"
+            as="input"
+            type="submit"
+            value="Search"
+          />
+        </InputGroup>
+        <ListGroup variant="flush" className="mb-3">
+          {searchInput ? (
+            autocompleteSearchesList
+          ) : (
+            <>
+              <p className="h6">Trending searches</p>
+              {trendingSearchesList}
+            </>
+          )}
+        </ListGroup>
         {searchInput ? (
-          autocompleteSearchesList
+          <>
+            {searchQuery && <h3>Search results for: {searchQuery}</h3>}
+            <Gallery gifs={searchedGifs} isLoading={isLoading} url={url} />
+          </>
         ) : (
           <>
-            <p className="h6">Trending searches</p>
-            {trendingSearchesList}
+            <p className="h6">Popular now</p>
+            <Trending />
           </>
         )}
-      </ListGroup>
-      {searchInput ? (
-        <>
-          {searchQuery && <h3>Search results for: {searchQuery}</h3>}
-          <Gallery gifs={searchedGifs} isLoading={isLoading} />
-        </>
-      ) : (
-        <>
-          <p className="h6">Popular now</p>
-          <Trending />
-        </>
-      )}
+      </Route>
+      <Route path={`${path}/gifs/:id`}>
+        <Gif />
+      </Route>
     </>
   );
 }
