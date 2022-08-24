@@ -36,7 +36,7 @@ class Api {
   }
 
   getRandomGif() {
-    return fetch(`${this._downloadUrl}/random?api_key=${this._apiKey}`).then(
+    return fetch(`${this._downloadUrl}/gifs/random?api_key=${this._apiKey}`).then(
       this._checkResponse
     );
   }
