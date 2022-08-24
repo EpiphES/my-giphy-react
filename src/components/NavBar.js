@@ -25,10 +25,7 @@ function NavBar() {
             </Nav.Link>
             <Nav.Link as={Link} to="/random" eventKey="/random">
               Random
-            </Nav.Link>
-            <Nav.Link as={Link} to="/upload" eventKey="/upload">
-              Upload
-            </Nav.Link>
+            </Nav.Link>            
           </Nav>
         </NavbarCollapse>
       </Container>

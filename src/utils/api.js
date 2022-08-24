@@ -5,9 +5,9 @@ class Api {
     this._apiKey = apiKey;
   }
 
-  getTrendingGifs() {
+  getTrendingGifs(offset) {
     return fetch(
-      `${this._downloadUrl}/gifs/trending?api_key=${this._apiKey}&limit=30`
+      `${this._downloadUrl}/gifs/trending?api_key=${this._apiKey}&limit=30&offset=${offset}`
     ).then(this._checkResponse);
   }
 
