@@ -10,7 +10,7 @@ import api from "../utils/api";
 
 function Gif() {
   const history = useHistory();
-  const [gif, setGif] = useState({})
+  const [gif, setGif] = useState(null)
   const { id } = useParams();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,30 +35,36 @@ function Gif() {
       className="d-flex flex-column align-items-center pt-3"
       >
       {isLoading ? (
-         <Container className="d-flex align-items-center justify-content-center" style={{
-          minHeight:"calc(100vh - 56px)"
-        }}>
-          <Spinner animation="border" variant="danger" role="status" />          
+        <Container
+          className="d-flex align-items-center justify-content-center"
+          style={{
+            minHeight: "calc(100vh - 56px)",
+          }}>
+          <Spinner animation="border" variant="danger" role="status" />
         </Container>
       ) : (
-        <div
-          className="mx-auto rounded bg-warning"
-          style={{
-            width: gif.images?.original.width + "px",
-            maxWidth: "100%",
-            aspectRatio: gif.images?.original.width / gif.images?.original.height,
-          }}>
-          <Image
-            rounded
-            src={gif.images?.original.url}
-            alt={gif.title}
-            style={{ maxWidth: "100%" }}
-          />
-        </div>
+        gif && (
+          <>
+            <div
+              className="mx-auto rounded bg-warning"
+              style={{
+                width: gif.images.original.width + "px",
+                maxWidth: "100%",
+                aspectRatio: gif.images.original.width / gif.images.original.height,
+              }}>
+              <Image
+                rounded
+                src={gif.images.original.url}
+                alt={gif.title}
+                style={{ maxWidth: "100%" }} />
+            </div>
+            <Button className="mt-3 mx-auto" onClick={() => history.goBack()}>
+                Go back
+            </Button>
+          </>
+        )
       )}
-      <Button className="mt-3 mx-auto" onClick={() => history.goBack()}>
-        Go back
-      </Button>
+      
     </Container>
   );
 }
