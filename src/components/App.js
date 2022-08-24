@@ -13,7 +13,7 @@ function App() {
   return (
     <div className="App">
       <NavBar />
-      <Container style={{ marginTop: "56px" }}>
+      <Container style={{ paddingTop: "56px",minHeight:"100vh"}}>
         <Switch>
           <Route path="/trending">
             <Trending />
