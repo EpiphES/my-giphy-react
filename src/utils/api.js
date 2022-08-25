@@ -11,9 +11,9 @@ class Api {
     ).then(this._checkResponse);
   }
 
-  searchGifs(searchInput) {
+  searchGifs(searchInput, offset) {
     return fetch(
-      `${this._downloadUrl}/gifs/search?api_key=${this._apiKey}&q=${searchInput}&limit=30`
+      `${this._downloadUrl}/gifs/search?api_key=${this._apiKey}&q=${searchInput}&limit=30&offset=${offset}`
     ).then(this._checkResponse);
   }
 

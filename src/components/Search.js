@@ -1,18 +1,16 @@
-import {useState, useEffect} from "react";
+import {useState, useEffect, useCallback} from "react";
 import { Route, useRouteMatch } from "react-router-dom";
 import api from "../utils/api";
 import Trending from "./Trending";
 import Gallery from "./Gallery";
 import Gif from "./Gif";
+import Pagination from "./Pagination";
 
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import ListGroup from "react-bootstrap/ListGroup";
 import searchIcon from "../images/search.svg"
-
-
-
 
 function Search() {
   const [searchInput, setSearchInput] = useState("");
@@ -22,6 +20,8 @@ function Search() {
   const [autocompleteSearches, setAutocommpleteSearches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const { path, url } = useRouteMatch();
+  const [page, setPage] = useState(0);
+  const [totalCount, setTotalCount] = useState(0);
 
   function loadTrendingSearches() {
     api
@@ -39,23 +39,25 @@ function Search() {
       .catch((err) => console.log(err));
   }
 
-  function handleSearch(query) {
+  const handleSearch = useCallback((query) => {
     setIsLoading(true);
     setSearchInput(query);
     setSearchQuery(query);
+    const offset = page * 30;
     api
-      .searchGifs(query)
+      .searchGifs(query, offset)
       .then((res) => {
         if (res.data.length === 0) {
           alert("Nothing found!");
         }
         setSearchedGifs(res.data);
+        setTotalCount(res.pagination.total_count);
       })
       .catch((err) => console.log(err))
       .finally(() => {
         setIsLoading(false);
       });
-  }
+  }, [page]);
 
   function resetInput() {
     setSearchInput("");
@@ -63,7 +65,10 @@ function Search() {
   
   function getSearchesList(searchesArray) {
     return searchesArray.map((query, index) => (
-      <ListGroup.Item action key={index} onClick={() => handleSearch(query)}>
+      <ListGroup.Item action key={index} onClick={() => {
+        setPage(0);
+        handleSearch(query, page);
+        }}>
         <img src={searchIcon} alt="search icon" width="10px" hight="10px"/>{" "}{query}
       </ListGroup.Item>
     ));
@@ -73,7 +78,8 @@ function Search() {
 
   function handleFormSubmit(e) {
     e.preventDefault();
-    handleSearch(searchInput);
+    setPage(0);
+    handleSearch(searchInput, page);
   }
 
   function handleInputChange(e) {
@@ -90,10 +96,24 @@ function Search() {
     }
   }, [searchInput]);
 
+  useEffect(() => {
+    if(page > 0)
+    handleSearch(searchInput, page);
+  }, [page, handleSearch, searchInput])
+
+  function handlePreviousClick() {
+    setPage((prevState) => prevState - 1);
+  }
+
+  function handleNextClick() {
+    setPage((prevState) => prevState + 1);
+  }
+
+
   return (
     <>
       <Route exact path={`${path}`}>
-        <InputGroup as="form" className="pt-2 mb-3" onSubmit={handleFormSubmit}>
+        <InputGroup as="form" className="pt-3 mb-3" onSubmit={handleFormSubmit}>
           <Form.Control
             type="text"
             placeholder="Search all the GIFs"
@@ -134,6 +154,11 @@ function Search() {
           <>
             {searchQuery && <h3>Search results for: {searchQuery}</h3>}
             <Gallery gifs={searchedGifs} isLoading={isLoading} url={url} />
+            <Pagination
+              onPreviousClick={handlePreviousClick}
+              onNextClick={handleNextClick}
+              prevButtonDisabled={page === 0}
+              nextButtonDisabled={page === Math.floor(totalCount/30)}></Pagination>
           </>
         ) : (
           <>

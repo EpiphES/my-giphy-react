@@ -27,9 +27,11 @@ function Random() {
   return (
     <Container className="d-flex flex-column align-items-center pt-3">
       {isLoading ? (
-        <Container className="d-flex align-items-center justify-content-center" style={{
-          minHeight:"calc(100vh - 56px)"
-        }}>
+        <Container
+          className="d-flex align-items-center justify-content-center"
+          style={{
+            minHeight: "calc(100vh - 56px)",
+          }}>
           <Spinner animation="border" variant="danger" role="status" />
         </Container>
       ) : (
