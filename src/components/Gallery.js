@@ -5,11 +5,12 @@ import Image from "react-bootstrap/Image";
 import Spinner from "react-bootstrap/Spinner";
 import Container from "react-bootstrap/Container";
 
-function Gallery({gifs, isLoading, url}) {
-  const gifElements = gifs.map((gif) => {
+
+function Gallery({gifs, isLoading, url, onPreviousClick, onNextClick, prevButtonDisabled, nextButtonDisabled}) {
+  const gifElements = gifs.map((gif, ind) => {
     return (
       <Link
-        key={gif.id}
+        key={ind}
         to={`${url}/gifs/${gif.id}`}
         className="bg-warning rounded"
         style={{
@@ -36,11 +37,12 @@ function Gallery({gifs, isLoading, url}) {
       </Spinner>
     </Container>
   ) : (
-    <ResponsiveMasonry
-      columnsCountBreakPoints={{ 350: 2, 576: 3, 768: 4, 992: 5, 1200: 6 }}
-      className="pt-2 pb-2">
-      <Masonry gutter="10px">{gifElements}</Masonry>
-    </ResponsiveMasonry>
+      <ResponsiveMasonry
+        columnsCountBreakPoints={{ 350: 2, 576: 3, 768: 4, 992: 5, 1200: 6 }}
+        className="pt-2"
+        style={{ paddingBottom: "60px" }}>
+        <Masonry gutter="10px">{gifElements}</Masonry>
+      </ResponsiveMasonry>
   );
 }
 export default Gallery;

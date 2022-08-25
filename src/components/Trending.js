@@ -1,11 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { Route, useRouteMatch} from "react-router-dom";
-import Gallery from "./Gallery";
 import api from "../utils/api";
+import Gallery from "./Gallery";
 import Gif from "./Gif";
-import Button from "react-bootstrap/Button";
-import prevIcon from "../images/arrow-left.svg";
-import nextIcon from "../images/arrow-right.svg";
+import Pagination from "./Pagination";
+
 
 function Trending() {
   const [trendingGifs, setTrendingGifs] = useState([]);
@@ -45,33 +44,8 @@ function Trending() {
   return (
     <>
       <Route exact path={`${path}`}>
-        <Gallery gifs={trendingGifs} isLoading={isLoading} url={url} />
-        <div className="py-2 d-flex justify-content-evenly fixed-bottom bg-dark bg-opacity-75">
-          <Button
-            variant="light"
-            size="sm"
-            disabled={page === 0}
-            onClick={handlePreviousClick}>
-            <img
-              src={prevIcon}
-              alt="left arrow icon"
-              width="25px"
-              hight="25px"
-            />
-          </Button>
-          <Button
-            variant="light"
-            size="sm"
-            disabled={page === totalCount % 30}
-            onClick={handleNextClick}>
-            <img
-              src={nextIcon}
-              alt="right arrow icon"
-              width="25px"
-              hight="25px"
-            />
-          </Button>
-        </div>
+        <Gallery gifs={trendingGifs} isLoading={isLoading} url={url}/>
+        <Pagination onPreviousClick={handlePreviousClick} onNextClick={handleNextClick} prevButtonDisabled={page === 0} nextButtonDisabled={page === totalCount & 30}></Pagination>        
       </Route>
       <Route path={`${path}/gifs/:id`}>
         <Gif />
